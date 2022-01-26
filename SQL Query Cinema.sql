@@ -69,12 +69,6 @@ CREATE TABLE ActorsMovies(
 	ActorID int references Actors(ID)
 )
 
-CREATE TABLE MoviesHall(
-	ID int primary key identity,
-	MovieID int references Movies(ID),
-	HallID int references Halls(ID)
-)
-
 CREATE TABLE CustomersTickets(
 	ID int primary key identity,
 	CustomerID int references Customers(ID),
@@ -200,19 +194,6 @@ VALUES	(1,10),
 		(10,1),
 		(1,1),
 		(2,1)
-
-INSERT INTO MoviesHall
-VALUES	(2,5),
-		(3,5),
-		(4,4),
-		(5,3),
-		(6,4),
-		(7,3),
-		(8,2),
-		(9,2),
-		(10,1),
-		(1,1),
-		(1,5)
 
 INSERT INTO CustomersTickets
 VALUES	(1,1),
