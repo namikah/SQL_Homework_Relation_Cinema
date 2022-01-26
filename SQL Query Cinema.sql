@@ -249,6 +249,18 @@ VALUES	(1,1),
 --JOIN Genres G ON G.ID = MG.GenreID
 --JOIN Halls H ON H.ID = SF.HallID
 
+--CREATE VIEW v_AllSessions
+--AS
+--SELECT SF.ID, SF.SessionDate 'Date', SF.StartSession 'Start', SF.EndSession 'End', H.Name 'Halls', M.Name 'Movies', M.YearOfMovie, G.Name 'Genres', SP.Name 'Sponsors'
+--FROM SessionsFilm SF
+--JOIN Movies M ON M.ID = SF.MovieID
+--JOIN Sponsors SP ON Sp.ID = M.SponsorID
+--JOIN MoviesGenres MG ON MG.MovieID = M.ID
+--JOIN Genres G ON G.ID = MG.GenreID
+--JOIN Halls H ON H.ID = SF.HallID
 
 SELECT * FROM v_All_Tickets
+ORDER BY Date
+
+SELECT * FROM v_AllSessions
 ORDER BY Date
