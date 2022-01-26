@@ -112,18 +112,6 @@ VALUES	('Mercury',50),
 		('Mars',70),
 		('Jupiter',100)
 	
-INSERT INTO SessionsFilm
-VALUES	(1,5,'2022-01-26','17:30','18:50'),
-		(2,3,'2022-01-26','15:30','17:00'),
-		(10,2,'2022-01-26','13:30','15:00'),
-		(8,1,'2022-01-26','11:00','13:00'),
-		(7,5,'2022-01-26','09:30','10:30'),
-		(1,5,'2022-01-27','17:30','18:50'),
-		(2,2,'2022-01-27','15:30','17:00'),
-		(10,4,'2022-01-27','13:30','15:00'),
-		(8,3,'2022-01-27','11:00','13:00'),
-		(7,1,'2022-01-27','09:30','10:30')
-	
 INSERT INTO Customers
 VALUES	('Namik', 'Heydarov', 34, 'Male'),
 		('Elmin', 'Kerimov', 27, 'Male'),
@@ -158,13 +146,87 @@ VALUES	(1),
 		(6),
 		(7)
 
-CREATE VIEW v_All_Tickets_List
-AS
-SELECT T.ID, S.SessionDate, S.StartSession, S.EndSession, H.Name 'Halls', M.Name 'Movies', M.YearOfMovie
-FROM Tickets T
-JOIN SessionsFilm S ON S.ID = T.SessionID
-JOIN Movies M ON M.ID = S.MovieID
-JOIN Halls H ON H.ID = S.HallID
+INSERT INTO SessionsFilm
+VALUES	(1,5,'2022-01-26','17:30','18:50'),
+		(2,3,'2022-01-26','15:30','17:00'),
+		(10,2,'2022-01-26','13:30','15:00'),
+		(8,1,'2022-01-26','11:00','13:00'),
+		(7,5,'2022-01-26','09:30','10:30'),
+		(1,5,'2022-01-27','17:30','18:50'),
+		(2,2,'2022-01-27','15:30','17:00'),
+		(10,4,'2022-01-27','13:30','15:00'),
+		(8,3,'2022-01-27','11:00','13:00'),
+		(7,1,'2022-01-27','09:30','10:30')
 
-SELECT * 
-FROM v_All_Tickets_List
+INSERT INTO MoviesGenres
+VALUES	(1,1),
+		(2,1),
+		(3,5),
+		(4,3),
+		(5,3),
+		(6,2),
+		(7,4),
+		(8,5),
+		(9,2),
+		(10,1),
+		(3,1),
+		(4,1)
+
+INSERT INTO ActorsMovies
+VALUES	(1,10),
+		(2,9),
+		(3,8),
+		(4,7),
+		(5,6),
+		(6,4),
+		(7,3),
+		(8,5),
+		(9,2),
+		(10,1),
+		(1,1),
+		(2,1)
+
+INSERT INTO MoviesHall
+VALUES	(2,5),
+		(3,5),
+		(4,4),
+		(5,3),
+		(6,4),
+		(7,3),
+		(8,2),
+		(9,2),
+		(10,1),
+		(1,1),
+		(1,5)
+
+INSERT INTO CustomersTickets
+VALUES	(1,1),
+		(1,2),
+		(2,3),
+		(2,4),
+		(3,5),
+		(3,6),
+		(4,7),
+		(4,8),
+		(5,9),
+		(5,10),
+		(6,11),
+		(6,12),
+		(7,13),
+		(7,14),
+		(8,15),
+		(8,16),
+		(9,17),
+		(9,18),
+		(10,19),
+		(10,20)
+
+SELECT T.ID, SF.SessionDate 'Date', SF.StartSession 'Start', SF.EndSession 'End', H.Name 'Halls', M.Name 'Movies', M.YearOfMovie, G.Name 'Genres', C.Name + ' ' + C.Surname 'Customers', C.Gender
+FROM CustomersTickets CT
+JOIN Customers C ON C.ID = CT.CustomerID
+JOIN Tickets T ON T.ID = CT.TicketID
+JOIN SessionsFilm SF ON SF.ID = T.SessionID
+JOIN Movies M ON M.ID = SF.MovieID
+JOIN MoviesGenres MG ON MG.MovieID = M.ID
+JOIN Genres G ON G.ID = MG.GenreID
+JOIN Halls H ON H.ID = SF.HallID
