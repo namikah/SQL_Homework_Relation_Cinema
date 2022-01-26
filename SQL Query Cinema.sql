@@ -2,11 +2,17 @@ CREATE DATABASE Cinema
 
 USE Cinema
 
+CREATE TABLE Sponsors(
+	ID int primary key identity,
+	Name nvarchar(50) not null
+)
+
 CREATE TABLE Movies(
 	ID int primary key identity,
 	Name nvarchar(50) not null,
 	YearOfMovie nvarchar(4),
-	IMDb float
+	IMDb float,
+	SponsorID int references Sponsors(ID)
 )
 
 CREATE TABLE Genres(
@@ -46,7 +52,9 @@ CREATE TABLE Customers(
 
 CREATE TABLE Tickets(
 	ID int primary key identity,
-	SessionID int references SessionsFilm(ID)
+	SessionID int references SessionsFilm(ID),
+	Price float,
+	SeatNumber int
 )
 
 CREATE TABLE MoviesGenres(
@@ -73,18 +81,25 @@ CREATE TABLE CustomersTickets(
 	TicketID int references Tickets(ID)
 )
 
+INSERT INTO Sponsors
+VALUES	('Anadolu Restaurant'),
+		('Mc Donalds'),
+		('Kantakt Home'),
+		('Cinema Plus'),
+		('Kapital Bank')
+
 INSERT INTO Movies
-VALUES	('Matrix 2','2003',9.1),
-		('Matrix 3','2005',8.2),
-		('The Godfather','1972',9.1),
-		('The Godfather: Part II','1974',9.0),
-		('The Dark Knight ','2008',9.0),
-		('12 Angry Men','1957',8.9),
-		('Schindlers List ','1993',8.9),
-		('The Lord of the Rings: The Return of the King','2003',8.8),
-		('Pulp Fiction','1994',8.8),
-		('Terminator','1991',8.5),
-		('Gladiator','2000',8.5)
+VALUES	('Matrix 2','2003',9.1,1),
+		('Matrix 3','2005',8.2,2),
+		('The Godfather','1972',9.1,2),
+		('The Godfather: Part II','1974',9.0,3),
+		('The Dark Knight ','2008',9.0,4),
+		('12 Angry Men','1957',8.9,5),
+		('Schindlers List ','1993',8.9,4),
+		('The Lord of the Rings: The Return of the King','2003',8.8,1),
+		('Pulp Fiction','1994',8.8,5),
+		('Terminator','1991',8.5,2),
+		('Gladiator','2000',8.5,3)
 		
 INSERT INTO Genres
 VALUES	('Action'),
@@ -123,28 +138,6 @@ VALUES	('Namik', 'Heydarov', 34, 'Male'),
 		('Sevinc', 'Abdullayeva', 28, 'FeMale'),
 		('Anar', 'Kerimov', 50, 'Male'),
 		('Arzu', 'Xelilova', 18, 'FeMale')
-	
-INSERT INTO Tickets
-VALUES	(1),
-		(2),
-		(3),
-		(10),
-		(2),
-		(3),
-		(4),
-		(5),
-		(6),
-		(4),
-		(5),
-		(6),
-		(7),
-		(8),
-		(9),
-		(10),
-		(4),
-		(5),
-		(6),
-		(7)
 
 INSERT INTO SessionsFilm
 VALUES	(1,5,'2022-01-26','17:30','18:50'),
@@ -157,6 +150,28 @@ VALUES	(1,5,'2022-01-26','17:30','18:50'),
 		(10,4,'2022-01-27','13:30','15:00'),
 		(8,3,'2022-01-27','11:00','13:00'),
 		(7,1,'2022-01-27','09:30','10:30')
+	
+INSERT INTO Tickets
+VALUES	(1,7.50,1),
+		(2,7.50,2),
+		(3,10,3),
+		(10,10,4),
+		(2,7.50,5),
+		(3,7.50,6),
+		(4,7.50,7),
+		(5,7.50,8),
+		(6,10,9),
+		(4,7.50,10),
+		(5,7.50,11),
+		(6,10,12),
+		(7,7.50,13),
+		(8,7.50,14),
+		(9,10,15),
+		(10,10,16),
+		(4,7.50,17),
+		(5,7.50,18),
+		(6,10,19),
+		(7,7.50,20)
 
 INSERT INTO MoviesGenres
 VALUES	(1,1),
@@ -221,12 +236,19 @@ VALUES	(1,1),
 		(10,19),
 		(10,20)
 
-SELECT T.ID, SF.SessionDate 'Date', SF.StartSession 'Start', SF.EndSession 'End', H.Name 'Halls', M.Name 'Movies', M.YearOfMovie, G.Name 'Genres', C.Name + ' ' + C.Surname 'Customers', C.Gender
-FROM CustomersTickets CT
-JOIN Customers C ON C.ID = CT.CustomerID
-JOIN Tickets T ON T.ID = CT.TicketID
-JOIN SessionsFilm SF ON SF.ID = T.SessionID
-JOIN Movies M ON M.ID = SF.MovieID
-JOIN MoviesGenres MG ON MG.MovieID = M.ID
-JOIN Genres G ON G.ID = MG.GenreID
-JOIN Halls H ON H.ID = SF.HallID
+--CREATE VIEW v_All_Tickets
+--AS
+--SELECT T.ID, SF.SessionDate 'Date', SF.StartSession 'Start', SF.EndSession 'End', H.Name 'Halls',T.SeatNumber 'Seat Number', T.Price 'Price (AZN)', M.Name 'Movies', M.YearOfMovie, G.Name 'Genres',SP.Name 'Sponsors', C.Name + ' ' + C.Surname 'Customers', C.Gender
+--FROM CustomersTickets CT
+--JOIN Customers C ON C.ID = CT.CustomerID
+--JOIN Tickets T ON T.ID = CT.TicketID
+--JOIN SessionsFilm SF ON SF.ID = T.SessionID
+--JOIN Movies M ON M.ID = SF.MovieID
+--JOIN Sponsors SP ON Sp.ID = M.SponsorID
+--JOIN MoviesGenres MG ON MG.MovieID = M.ID
+--JOIN Genres G ON G.ID = MG.GenreID
+--JOIN Halls H ON H.ID = SF.HallID
+
+
+SELECT * FROM v_All_Tickets
+ORDER BY Date
